@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>じょいさんのブログ</title>
+  <link rel="stylesheet" href="blog-media.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=M+PLUS+1p&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="cafe-background">
+    <div class="overlay">
+      <header class="blog-header">
+        <h1>Vlog of joy</h1>
+      </header>
+
+      <main class="blog-layout">
+        <section class="blog-content" id="blogContent">
+          <!-- Supabaseから投稿を読み込んで表示 -->
+        </section>
+      </main>
+
+      <footer>
+        <a href="./joy.html" class="back-link">← じょいの詳細ページに戻る</a>
+      </footer>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabase = createClient(
+      'https://wwzhrrxlzlzfgbtlbdgy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...（anon key）'
+    )
+
+    const { data: blogs } = await supabase
+      .from('blogs')
+      .select('*')
+      .order('date', { ascending: false })
+
+    const container = document.getElementById('blogContent')
+    blogs.forEach(blog => {
+      const article = document.createElement('article')
+      article.className = 'blog-entry'
+      article.innerHTML = `
+        <p class="post-date">${blog.date}</p>
+        <h3>${blog.title}</h3>
+        <p>${blog.content}</p>
+        ${blog.media_url?.endsWith('.mp4')
+          ? `<video controls><source src="${blog.media_url}" type="video/mp4"></video>`
+          : `<img src="${blog.media_url}" alt="投稿メディア">`}
+      `
+      container.appendChild(article)
+    })
+  </script>
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>じょいさんのブログ</title>
+  <link rel="stylesheet" href="blog-media.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=M+PLUS+1p&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="cafe-background">
+    <div class="overlay">
+      <header class="blog-header">
+        <h1>Vlog of joy</h1>
+      </header>
+
+      <main class="blog-layout">
+        <section class="blog-content" id="blogContent">
+       
+        </section>
+      </main>
+
+      <footer>
+        <a href="./joy.html" class="back-link">← じょいの詳細ページに戻る</a>
+      </footer>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabase = createClient(
+      'https://wwzhrrxlzlzfgbtlbdgy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...（anon key）'
+    )
+
+    const { data: blogs } = await supabase
+      .from('blogs')
+      .select('*')
+      .order('date', { ascending: false })
+
+    const container = document.getElementById('blogContent')
+    blogs.forEach(blog => {
+      const article = document.createElement('article')
+      article.className = 'blog-entry'
+      article.innerHTML = `
+        <p class="post-date">${blog.date}</p>
+        <h3>${blog.title}</h3>
+        <p>${blog.content}</p>
+        ${blog.media_url?.endsWith('.mp4')
+          ? `<video controls><source src="${blog.media_url}" type="video/mp4"></video>`
+          : `<img src="${blog.media_url}" alt="投稿メディア">`}
+      `
+      container.appendChild(article)
+    })
+  </script>
+</body>
+</html> -->
