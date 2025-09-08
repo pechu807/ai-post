@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>じょいの投稿ページ</title>
+  <link rel="stylesheet" href="joy-post.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=M+PLUS+1p&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="post-wrapper">
+    <h1 class="post-title">じょいのひとこと記録</h1>
+
+    <form id="blogForm">
+      <label for="title">タイトル：</label>
+      <input type="text" id="title" name="title" required />
+
+      <label for="date">日付：</label>
+      <input type="date" id="date" name="date" required />
+
+      <label for="content">本文：</label>
+      <textarea id="content" name="content" rows="6" required></textarea>
+
+      <label for="media">写真・動画：</label>
+      <input type="file" id="media" name="media" accept="image/*,video/*" />
+
+      <button type="submit">投稿する</button>
+    </form>
+
+    <p class="note">※投稿は自動でブログに反映されます</p>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabase = createClient(
+      'https://wwzhrrxlzlzfgbtlbdgy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...（anon key）'
+    )
+
+    document.getElementById('blogForm').addEventListener('submit', async (e) => {
+      e.preventDefault()
+
+      const title = document.getElementById('title').value
+      const date = document.getElementById('date').value
+      const content = document.getElementById('content').value
+      const file = document.getElementById('media').files[0]
+
+      let mediaUrl = null
+      if (file) {
+        const { data, error } = await supabase.storage
+          .from('blog-media')
+          .upload(`public/${file.name}`, file)
+
+        if (!error) {
+          mediaUrl = supabase.storage.from('blog-media').getPublicUrl(`public/${file.name}`).data.publicUrl
+        }
+      }
+
+      await supabase.from('blogs').insert([{ title, date, content, media_url: mediaUrl }])
+      alert('投稿が完了しました！')
+      document.getElementById('blogForm').reset()
+    })
+  </script>
+</body>
+</html>
