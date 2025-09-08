@@ -6,4 +6,4 @@
 
 # HTMLファイルを除外
 *.html
-!joy-post.html
+!joypost.html
