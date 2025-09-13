@@ -1,9 +1,0 @@
-# CSSファイルを除外
-*.css
-
-# 画像フォルダを除外
-# images/
-
-# HTMLファイルを除外
-*.html
-!joypost.html
