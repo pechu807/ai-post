@@ -1,0 +1,13 @@
+# 一時ファイルやIDE関連
+*.log
+*.DS_Store
+node_modules/
+
+# 除外したい画像（必要に応じて）
+# images/
+
+# 除外したいCSS（必要に応じて）
+# *.css
+
+# 除外したいHTML（必要に応じて）
+# *.html

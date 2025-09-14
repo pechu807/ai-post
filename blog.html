@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>じょいさんのブログ</title>
+  <link rel="stylesheet" href="blog-media.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=M+PLUS+1p&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="cafe-background">
+    <div class="overlay">
+      <header class="blog-header">
+        <h1>Vlog of joy</h1>
+      </header>
+
+      <main class="blog-layout">
+        <section class="blog-content" id="blogContent">
+          <!-- JSONから投稿を読み込んで表示 -->
+        </section>
+      </main>
+
+      <footer>
+        <a href="./joy.html" class="back-link">← じょいの詳細ページに戻る</a>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    fetch('https://script.google.com/macros/s/AKfycbzSZms_OwDf6-f8jAxcnUVSuExWB0O-uAE7slIKbMm4OojcQSvSL6NARqyGEW0uJVFl/exec')
+      .then(res => res.json())
+      .then(blogs => {
+        const container = document.getElementById('blogContent');
+        blogs.reverse().forEach(blog => {
+          const article = document.createElement('article');
+          article.className = 'blog-entry';
+
+          const date = new Date(blog['日付']).toLocaleDateString('ja-JP', {
+            year: 'numeric', month: 'long', day: 'numeric'
+          });
+
+          let mediaHTML = '';
+          const mediaUrl = blog['メディアurl'];
+          if (mediaUrl) {
+            if (mediaUrl.endsWith('.mp4')) {
+              mediaHTML = `<video controls><source src="${mediaUrl}" type="video/mp4"></video>`;
+            } else if (mediaUrl.includes('id=')) {
+              const driveId = mediaUrl.split('id=')[1];
+              mediaHTML = `<img src="https://drive.google.com/uc?export=view&id=${driveId}" alt="投稿メディア">`;
+            } else {
+              mediaHTML = `<img src="${mediaUrl}" alt="投稿メディア">`; // fallback
+            }
+          }
+
+          article.innerHTML = `
+            <p class="post-date">${date}</p>
+            <h3>${blog['タイトル']}</h3>
+            <blockquote>${blog['本文']}</blockquote>
+            ${mediaHTML}
+          `;
+          container.appendChild(article);
+        });
+      })
+      .catch(error => {
+        console.error('データの取得に失敗しました:', error);
+        document.getElementById('blogContent').innerHTML = '<p>投稿の読み込みに失敗しました。</p>';
+      });
+  </script>
+</body>
+</html>

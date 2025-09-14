@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>じょいの投稿ページ</title>
+  <link rel="stylesheet" href="joy-post.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=M+PLUS+1p&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="post-wrapper">
+    <h1 class="post-title">じょいのひとこと記録</h1>
+
+    <!-- 投稿フォーム -->
+    <form id="blogForm">
+      <label for="title">タイトル：</label>
+      <input type="text" id="title" name="title" required />
+
+      <label for="date">日付：</label>
+      <input type="date" id="date" name="date" required />
+
+      <label for="content">本文：</label>
+      <textarea id="content" name="content" rows="6" required></textarea>
+
+      <label for="media">写真・動画：</label>
+      <input type="file" id="media" name="media" accept="image/*,video/*" />
+
+      <button type="submit">投稿する</button>
+    </form>
+
+    <p class="note">※投稿は自動でブログに反映されます</p>
+
+    <!-- 投稿完了メッセージ -->
+    <section id="confirmation"></section>
+  </main>
+
+  <script type="module">
+    // Supabaseクライアントの初期化
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabaseUrl = 'https://neigpzmxbmsjgwbvuwnq.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laWdwem14Ym1zamd3YnZ1d25xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc1OTAzNDgsImV4cCI6MjA3MzE2NjM0OH0.vuSMa_CvbD4B5NHC-STnSP6fNUkMmD2rBo4gag1gXfg'
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // 投稿処理
+    document.getElementById('blogForm').addEventListener('submit', async (e) => {
+      e.preventDefault()
+
+      const title = document.getElementById('title').value
+      const date = document.getElementById('date').value
+      const content = document.getElementById('content').value
+      const file = document.getElementById('media').files[0]
+
+      let mediaUrl = null
+
+      // メディアファイルのアップロード
+      if (file) {
+        const extension = file.name.split('.').pop().toLowerCase()
+        const safeFileName = `media_${Date.now()}.${extension}`
+        const mimeType = file.type || 'application/octet-stream'
+        const arrayBuffer = await file.arrayBuffer()
+        const blob = new Blob([arrayBuffer], { type: mimeType })
+
+        const { error } = await supabase.storage
+          .from('blogs')
+          .upload(`public/${safeFileName}`, blob, {
+            contentType: mimeType,
+            cacheControl: '3600',
+            upsert: false
+          })
+
+        if (error) {
+          alert('メディアのアップロードに失敗しました: ' + error.message)
+          console.error(error)
+          return
+        }
+
+        mediaUrl = supabase.storage
+          .from('blogs')
+          .getPublicUrl(`public/${safeFileName}`).data.publicUrl
+      }
+
+      // データベースへの挿入
+      const { error: insertError } = await supabase.from('blogs').insert([
+        {
+          title,
+          date,
+          post: content, // Supabase側のカラム名に合わせてください
+          media_url: mediaUrl
+        }
+      ])
+
+      if (insertError) {
+        alert('投稿に失敗しました: ' + insertError.message)
+        console.error(insertError)
+        return
+      }
+
+      // 投稿完了メッセージの表示
+      const confirmation = document.getElementById('confirmation')
+      confirmation.innerHTML = `
+        <div class="confirmation-box">
+          <p>✅ 投稿が完了しました！</p>
+          <p><strong>タイトル:</strong> ${title}</p>
+          <p><strong>日付:</strong> ${date}</p>
+          <p><strong>本文:</strong> ${content}</p>
+          ${mediaUrl ? `<p><strong>メディア:</strong> <a href="${mediaUrl}" target="_blank">確認する</a></p>` : ''}
+        </div>
+      `
+
+      document.getElementById('blogForm').reset()
+    })
+  </script>
+</body>
+</html>
