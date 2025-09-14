@@ -26,15 +26,23 @@
     </div>
   </div>
 
-  <script>
+ <script>
   fetch('https://script.google.com/macros/s/AKfycbzSZms_OwDf6-f8jAxcnUVSuExWB0O-uAE7slIKbMm4OojcQSvSL6NARqyGEW0uJVFl/exec')
     .then(response => {
       if (!response.ok) {
         throw new Error(`HTTPエラー: ${response.status}`);
       }
-      return response.json();
+      // GASが application/json を返せない場合に備えて text() → JSON.parse()
+      return response.text();
     })
-    .then(blogs => {
+    .then(text => {
+      let blogs;
+      try {
+        blogs = JSON.parse(text);
+      } catch (err) {
+        throw new Error('JSONの解析に失敗しました');
+      }
+
       const container = document.getElementById('blogContent');
       container.innerHTML = ''; // 初期化
 
