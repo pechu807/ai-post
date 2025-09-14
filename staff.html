@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>スタッフ紹介 | Summer Gate</title>
+  <link rel="stylesheet" href="staff.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400..700&family=Hachi+Maru+Pop&family=M+PLUS+1:wght@100..900&family=M+PLUS+1p&family=M+PLUS+2:wght@100..900&family=Noto+Sans+JP:wght@100..900&family=Noto+Serif+JP:wght@200..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Zen+Kaku+Gothic+New&display=swap" rel="stylesheet">
+  <style>
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 10px #ffc0cb; }
+      50% { box-shadow: 0 0 20px #ff99bb; }
+    }
+    .blinking {
+      animation: glow 1.5s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <header class="fixed-header">
+    <nav>
+      <ul>
+        <li><a href="./staff.html">在籍表</a></li>
+        <li><a href="./schedule.html">出勤表</a></li>
+        <li><a href="./price.html">料金表</a></li>
+        <li><a href="./vlog.html">カード決済</a></li>
+        <li><a href="./recrut.html">求人</a></li>
+      </ul>
+    </nav>
+    <div class="contact-bar">
+      <p>
+        📞 <a href="tel:0123456789">012-3456-789</a>　
+        <a href="https://line.me/ti/p/LINE_ID" class="line-link">LINE ID: @yourlineid</a>
+      </p>
+    </div>
+  </header>
+
+  <section class="staff-section">
+    <h2>スタッフ紹介</h2>
+    <div class="staff-grid"></div>
+  </section>
+
+  <script>
+    const staff = [
+      { name: "さら", comment: "笑顔でお迎えします🌸", img: "images/1.png", link: "sara.html" },
+      { name: "くら", comment: "開けて💛", img: "images/2.png", link: "kura.html" },
+      { name: "らく", comment: "リラックス", img: "images/3.png", link: "raku.html" },
+      { name: "あお", comment: "深海へ", img: "images/4.png", link: "ao.html" },
+      { name: "らら", comment: "らららー", img: "images/5.png", link: "rara.html" },
+      { name: "ぽぽ", comment: "会いたいー", img: "images/6.png", link: "popo.html" },
+      { name: "ペニ", comment: "お好きでしょ", img: "images/7.png", link: "peni.html" },
+      { name: "ての", comment: "はじめての", img: "images/teno.png", link: "teno.html" },
+      { name: "くに", comment: "天ぷらが好き", img: "images/2.png", link: "kuni.html" },
+      { name: "めさ", comment: "お腹すいたー", img: "images/mesa.png", link: "mesa.html" },
+      { name: "もす", comment: "すぐ会えるよ", img: "images/mosu.png", link: "mosu.html" },
+      { name: "ペペ", comment: "よーいどん", img: "images/pepe.png", link: "pepe.html" },
+      { name: "そそ", comment: "そーゆーとこ", img: "images/soso.png", link: "soso.html" },
+      { name: "めら", comment: "メラメラ", img: "images/mera.png", link: "mera.html" },
+      { name: "どこ", comment: "カワユス", img: "images/doko.png", link: "doko.html" },
+      { name: "じょい", comment: "喜んで", img: "images/joy.png", link: "joy.html" },
+      { name: "ほん", comment: "趣味　読書", img: "images/hon.png", link: "hon.html" },
+      { name: "すん", comment: "デレデレ", img: "images/sun.png", link: "sun.html" },
+      { name: "きき", comment: "楽しも", img: "images/kiki.png", link: "kiki.html" },
+      { name: "どん", comment: "どんどどん", img: "images/don.png", link: "don.html" }
+    ];
+
+    const staffGrid = document.querySelector(".staff-grid");
+
+    fetch("schedule.json")
+      .then(res => res.json())
+      .then(scheduleMap => {
+        const today = new Date();
+        const mm = today.getMonth() + 1;
+        const dd = today.getDate();
+        const todayKey = `${mm}/${dd}`;
+        const todayStaff = scheduleMap[todayKey]?.map(s => s.name) || [];
+
+        staff.forEach(member => {
+          const blinkingClass = todayStaff.includes(member.name) ? "blinking" : "";
+          const card = `
+            <a href="${member.link}" class="staff-card-link">
+              <div class="staff-card ${blinkingClass}">
+                <img src="${member.img}" alt="${member.name}">
+                <h3>${member.name}</h3>
+                <p>「${member.comment}」</p>
+              </div>
+            </a>
+          `;
+          staffGrid.insertAdjacentHTML("beforeend", card);
+        });
+      });
+  </script>
+
+  <footer>
+    <span class="copyright">&copy; 2025 Summer Gate</span>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>出勤表 | Summer Gate</title>
+  <link rel="stylesheet" href="schedule.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400..700&family=Hachi+Maru+Pop&family=M+PLUS+1:wght@100..900&family=M+PLUS+1p&family=M+PLUS+2:wght@100..900&family=Noto+Sans+JP:wght@100..900&family=Noto+Serif+JP:wght@200..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Zen+Kaku+Gothic+New&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="fixed-header">
+    <nav>
+      <ul>
+        <li><a href="./staff.html">在籍表</a></li>
+        <li><a href="./schedule.html">出勤表</a></li>
+        <li><a href="./price.html">料金表</a></li>
+        <li><a href="./vlog.html">カード決済</a></li>
+        <li><a href="./recrut.html">求人</a></li>
+      </ul>
+    </nav>
+    <div class="contact-bar">
+      <p>
+        📞 <a href="tel:0123456789">012-3456-789</a>　
+        <a href="https://line.me/ti/p/LINE_ID" class="line-link">LINE ID: @yourlineid</a>
+      </p>
+    </div>
+  </header>
+
+  <section class="staff-section">
+    <h2>🌼 今週の出勤予定</h2>
+    <p class="note">※変更になる場合があります。最新情報はLINEでご確認ください。</p>
+
+    <div class="date-scroll-container">
+      <div class="date-display" id="dateDisplay"></div>
+      <div class="scroll-buttons">
+        <button class="scroll-up">↑</button>
+        <button class="scroll-down">↓</button>
+      </div>
+    </div>
+
+    <div class="staff-grid" id="staffGrid"></div>
+  </section>
+
+  <footer>
+    <span class="copyright">&copy; 2025 Summer Gate</span>
+  </footer>
+
+  <script>
+    const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+    const today = new Date();
+    const schedule = [];
+
+    const scheduleMap = {
+      "9/9": [
+        { name: "めさ", comment: "お腹すいたー", time: "12:00〜20:00", img: "images/mesa.png",link:"mesa.html" },
+        { name: "もす", comment: "すぐ会えるよ", time: "14:00〜22:00", img: "images/mosu.png" ,link:"mosu.html"},
+        { name: "ペペ", comment: "よーいどん", time: "10:00〜18:00", img: "images/pepe.png" ,link:"pepe.html"}
+      ],
+      "9/10": [
+        { name: "じょい", comment: "喜んで", time: "12:00〜20:00", img: "images/joy.png",link:"mera.html"  },
+        { name: "ほん", comment: "趣味　読書", time: "14:00〜22:00", img: "images/hon.png",link:"hon.html" },
+        { name: "すん", comment: "デレデレ", time: "10:00〜18:00", img: "images/sun.png",link:"sun.html" }
+      ],
+      "9/11": [
+        { name: "きき", comment: "楽しも", time: "12:00〜20:00", img: "images/kiki.png",link:"kiki.html" },
+        { name: "どん", comment: "どんどどん", time: "14:00〜22:00", img: "images/7.png" },
+        { name: "らく", comment: "リラックス", time: "10:00〜18:00", img: "images/3.png",link:"raku.html" }
+      ],
+      "9/12": [
+        { name: "じょい", comment: "喜んで", time: "12:00〜20:00", img: "images/joy.png",link:"joy.html"  },
+        { name: "ほん", comment: "趣味　読書", time: "14:00〜22:00", img: "images/hon.png",link:"hon.html" },
+        { name: "すん", comment: "デレデレ", time: "10:00〜18:00", img: "images/sun.png",link:"sun.html" }
+      ],
+      "9/13": [
+        { name: "きき", comment: "楽しも", time: "12:00〜20:00", img: "images/kiki.png",link:"kiki.html" },
+        { name: "どん", comment: "どんどどん", time: "14:00〜22:00", img: "images/7.png" },
+        { name: "らく", comment: "リラックス", time: "10:00〜18:00", img: "images/3.png",link:"raku.html" }
+      ],
+      "9/14": [
+        { name: "さら", comment: "笑顔でお迎えします🌸", time: "12:00〜20:00", img: "images/1.png", link:"sara.html" },
+        { name: "くら", comment: "開けて💛", time: "14:00〜22:00", img: "images/2.png" , link:"kura.html"},
+        { name: "らく", comment: "リラックス", time: "10:00〜18:00", img: "images/3.png",link:"raku.html" }
+      ],
+      "9/15": [
+        { name: "あお", comment: "深海へ", time: "12:00〜20:00", img: "images/4.png" ,link:"ao.html"},
+        { name: "らら", comment: "らららー", time: "14:00〜22:00", img: "images/5.png",link:"rara.html" },
+        { name: "ぽぽ", comment: "会いたいー", time: "10:00〜18:00", img: "images/6.png" ,link:"popo.html"},
+        { name: "どん", comment: "どんどどん", time: "14:00〜22:00", img: "images/don.png" ,link:"don.html"}
+      ],
+      "9/8": [
+        { name: "ペニ", comment: "お好きでしょ", time: "12:00〜20:00", img: "images/7.png",link:"peni.html"},
+        { name: "ての", comment: "はじめての", time: "14:00〜22:00", img: "images/teno.png",link:"teno.html" },
+        { name: "くに", comment: "天ぷらが好き", time: "10:00〜18:00", img: "images/2.png",link:"kuni.html" }
+      ]
+    };
+    
+
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      const key = `${date.getMonth() + 1}/${date.getDate()}`;
+      const formatted = `${date.getMonth() + 1}月${date.getDate()}日（${weekdays[date.getDay()]}）`;
+      const staff = scheduleMap[key] || [];
+      schedule.push({ date: formatted, staff });
+    }
+
+    let currentIndex = 0;
+    const dateDisplay = document.getElementById("dateDisplay");
+    const staffGrid = document.getElementById("staffGrid");
+
+//     function updateSchedule(index) {
+//       const entry = schedule[index];
+//       dateDisplay.textContent = entry.date;
+//       staffGrid.innerHTML = entry.staff.map(member => `
+//   <a href="staff/${member.name}.html" class="staff-card">
+//     <img src="${member.img}" alt="${member.name}" />
+//     <h3>${member.name}</h3>
+//     <p>${member.comment}</p>
+//     <p><strong>出勤時間：</strong>${member.time}</p>
+//   </a>
+// `).join("");
+//     }
+function updateSchedule(index) {
+  const entry = schedule[index];
+  dateDisplay.textContent = entry.date;
+
+  staffGrid.innerHTML = entry.staff.map(member => {
+    const tagOpen = member.link
+      ? `<a href="${member.link}" class="staff-card">`
+      : `<div class="staff-card">`;
+
+    const tagClose = member.link ? `</a>` : `</div>`;
+
+    return `
+      ${tagOpen}
+        <img src="${member.img}" alt="${member.name}" />
+        <h3>${member.name}</h3>
+        <p>${member.comment}</p>
+        <p><strong>出勤時間：</strong>${member.time}</p>
+      ${tagClose}
+    `;
+  }).join("");
+}
+
+    document.querySelector(".scroll-up").addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + schedule.length) % schedule.length;
+      updateSchedule(currentIndex);
+    });
+
+    document.querySelector(".scroll-down").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % schedule.length;
+      updateSchedule(currentIndex);
+    });
+
+    updateSchedule(currentIndex);
+  </script>
+</body>
+</html>  
