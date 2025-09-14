@@ -1,0 +1,208 @@
+/* 全体の基本スタイル */
+body {
+  font-family: "Kiwi Maru", serif;
+  background-color: #fffafc;
+  margin: 0;
+  padding-top: 120px; /* ヘッダー＋連絡先バーの高さ分 */
+  color: #555;
+  font-size: 16px; /* 基準フォントサイズ */
+}
+
+/* 固定ヘッダー */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ffeef2;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 100;
+  padding: 20px 0;
+}
+
+.fixed-header ul {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.fixed-header li {
+  margin: 0;
+}
+
+.fixed-header a {
+  text-decoration: none;
+  color: #d16d8f;
+  font-weight: bold;
+  font-size: 1.3rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+  display: inline-block;
+  padding: 5px 10px;
+}
+
+.fixed-header a:hover {
+  animation: bounceHeader 0.4s ease infinite;
+  color: #0077cc;
+}
+
+@keyframes bounceHeader {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* 連絡先バー */
+.contact-bar {
+  background-color: #fff0f5;
+  text-align: center;
+  padding: 12px;
+  font-size: 1rem;
+  color: #c06080;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  position: fixed;
+  top: 70px;
+  width: 100%;
+  z-index: 90;
+}
+
+/* 通常リンクの明滅 */
+.contact-bar a:not(.line-link) {
+  color: #d16d8f;
+  text-decoration: none;
+  font-weight: bold;
+  animation: contactBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes contactBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+  .contact-bar a:hover {
+  animation: bounceHeader 0.4s ease infinite;
+}
+
+
+/* LINEリンク専用スタイル */
+.line-link {
+  color: #00c300 !important;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.line-link:hover {
+  color: #009e00 !important;
+}
+
+
+/* スタッフ紹介セクション */
+.staff-section {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.staff-section h2 {
+  font-size: 2rem;
+  color: #c06080;
+  margin-bottom: 30px;
+}
+
+.staff-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.staff-card {
+  background-color: #fff0f5;
+  border-radius: 15px;
+  padding: 30px; /* 内側の余白を増やす */
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08); /* 少し強めの影で立体感 */
+  transition: transform 0.3s ease;
+  font-size: 1rem; /* 全体の文字サイズを少し大きく */
+}
+
+.staff-card:hover {
+  transform: scale(1.05); /* 拡大率を少し強めに */
+}
+
+.staff-card img {
+  width: 100%;
+  height: 240px; /* 高さを20%ほどアップ */
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.staff-card h3 {
+  margin-top: 20px;
+  color: #c06080;
+  font-size: 1.4rem; /* タイトルを少し大きく */
+}
+
+.staff-card p {
+  font-size: 1rem; /* 説明文も少し読みやすく */
+  color: #777;
+}
+.staff-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.staff-card-link:hover .staff-card {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+footer {
+  text-align: center;
+  padding: 16px 0;
+  font-size: 0.95rem;
+  color: #888;
+   font-family: "Dancing Script", sans-serif;
+}
+@media screen and (max-width: 768px) {
+  .staff-grid {
+    grid-template-columns: 1fr; /* 縦一列に */
+    gap: 20px; /* モバイルでは少し余白を狭めると自然 */
+    padding: 0 10px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .fixed-header a {
+    font-size: 1rem; /* 少し小さめに */
+    padding: 4px 6px; /* 横幅を抑える */
+  }
+
+  .fixed-header ul {
+    grid-template-columns: repeat(5, auto); /* 自動幅で詰める */
+    gap: 4px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .contact-bar {
+
+    justify-content: space-between;
+    flex-wrap: wrap;
+    top: 70px;
+    padding: 0;
+  }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.blinking {
+  animation: blink 1.2s ease-in-out infinite;
+}
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 10px #ffc0cb; }
+  50% { box-shadow: 0 0 20px #ff99bb; }
+}
+
+.blinking {
+  animation: glow 1.5s ease-in-out infinite;
+}

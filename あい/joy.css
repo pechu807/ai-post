@@ -1,0 +1,331 @@
+/* 基本設定 */
+body {
+  margin: 0;
+  padding-top: 180px;
+  font-family: 'Kiwi Maru', serif;
+ background: radial-gradient(ellipse at center, #fffde7 0%, #fff9c4 100%);
+  color: #f57f17;
+  min-height: 100vh;
+  background-attachment: fixed;
+  background-size: cover;
+  font-size: 16px;
+}
+
+/* 固定ヘッダー */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #1f60ee;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  z-index: 100;
+  padding: 20px 0;
+}
+
+.fixed-header ul {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.fixed-header li {
+  margin: 0;
+  transform: translateY(-5px);
+}
+
+.fixed-header a {
+  text-decoration: none;
+  color: #f57f17;
+  font-weight: bold;
+  font-size: 1.3rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+  display: inline-block;
+  padding: 5px 10px;
+}
+
+.fixed-header a:hover {
+  animation: bounceHeader 0.4s ease infinite;
+  color: #f0e4c0;
+}
+
+@keyframes bounceHeader {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* 連絡先バー */
+.contact-bar {
+   background-color: #fffde7;
+  color: #f57f17;
+  text-align: center;
+  padding: 12px;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  position: fixed;
+  top: 70px;
+  width: 100%;
+  z-index: 90;
+}
+
+.contact-bar a:not(.line-link) {
+  color: #c08060;
+  text-decoration: none;
+  font-weight: bold;
+  animation: contactBlink 1.5s ease-in-out infinite;
+}
+
+.line-link {
+  color: #00a000 !important;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.line-link:hover {
+  color: #007700 !important;
+}
+
+@keyframes contactBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.contact-bar a:hover {
+  animation: bounceHeader 0.4s ease infinite;
+}
+
+/* メインレイアウト */
+.staff-profile {
+  max-width: 1000px;
+  margin: auto;
+  padding: 2em;
+  background-color: rgba(235, 237, 242, 0.6);
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(80, 60, 40, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.profile-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.profile-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.profile-image-area {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-image: url('./images/joy.png'); /* くらさんの画像に変更 */
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(201, 201, 237, 0.5);
+  transition: background-image 0.5s ease;
+}
+
+.thumbnail-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.thumbnail-container img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.thumbnail-container img:hover {
+  opacity: 1;
+}
+
+.profile-info {
+  text-align: center;
+}
+
+.staff-name {
+  font-size: 2em;
+  color: #342dfb;
+}
+
+.shift-date,
+.shift-time {
+  font-size: 1rem;
+  color: #342dfb;
+}
+
+.comment {
+  font-size: 1.2em;
+  color: #342dfb;
+  font-style: italic;
+}
+
+.bio {
+  margin-top: 1em;
+  line-height: 1.8;
+  font-size: 1em;
+ color: #342dfb;
+  /* background-color: rgba(60, 50, 40, 0.3); */
+  padding: 1em;
+  border-radius: 12px;
+  word-break: keep-all !important;
+  overflow-wrap: break-word !important;
+}
+
+.ss {
+  color: #342dfb;
+  padding: 1em;
+  font-style: italic;
+}
+.blog-link {
+  display: inline-block;
+  margin-top: 1.5em;
+  font-size: 1rem;
+  color: #342dfb;
+  text-decoration: none;
+  font-weight: bold;
+  /* border-bottom: 1px dashed #c8bca0; */
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.blog-link:hover {
+  color: #342dfb;
+  /* border-bottom: 1px solid #f0e4c0; */
+   animation: bounceHeader 0.4s ease infinite;
+}
+.back-link {
+  display: inline-block;
+  margin-top: 2em;
+  text-decoration: none;
+  color: #342dfb;
+  font-weight: bold;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* PCサイズ時の横並び */
+@media screen and (min-width: 768px) {
+  .profile-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .profile-left {
+    width: 50%;
+  }
+
+  .profile-info {
+    width: 50%;
+    text-align: left;
+    padding-left: 2em;
+  }
+
+  .mobile-name {
+    display: none;
+  }
+
+  .desktop-name {
+    display: block;
+  }
+}
+
+/* スマホサイズ時の順序調整（縦並び） */
+@media screen and (max-width: 768px) {
+  .profile-layout {
+    flex-direction: column;
+  }
+
+  .profile-info {
+    width: 100%;
+    text-align: center;
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .staff-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0 10px;
+  }
+  .fixed-header li {
+  margin: 0;
+  transform: none;
+}
+
+  .fixed-header a {
+    font-size: 1rem;
+    padding: 4px 6px;
+  }
+
+  .fixed-header ul {
+    grid-template-columns: repeat(5, auto);
+    gap: 4px;
+  }
+
+  .contact-bar {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    top: 70px;
+    padding: 0;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.blinking {
+  animation: blink 1.2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 10px #c8bca0; }
+  50% { box-shadow: 0 0 20px #e0d0b0; }
+}
+
+.blinking {
+  animation: glow 1.5s ease-in-out infinite;
+}
+
+@media screen and (max-width: 767px) {
+  .mobile-name {
+    position: absolute;
+    top: -1.5em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.8em;
+    color: #342dfb;
+    /* text-shadow: 0 0 6px rgba(80, 60, 40, 0.6); */
+    z-index: 10;
+    margin: 0;
+    display: block;
+  }
+
+  .desktop-name {
+    display: none;
+  }
+}
+
+/* フッター */
+footer {
+  text-align: center;
+  padding: 16px 0;
+  font-size: 0.95rem;
+  color: #aaa;
+  font-family: "Dancing Script", sans-serif;
+}

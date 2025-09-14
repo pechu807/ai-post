@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>じょいの投稿ページ</title>
+  <link rel="stylesheet" href="joy-post.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=M+PLUS+1p&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="post-wrapper">
+    <h1 class="post-title">じょいのひとこと記録</h1>
+
+    <form id="blogForm">
+      <label for="title">タイトル：</label>
+      <input type="text" id="title" name="title" required />
+
+      <label for="date">日付：</label>
+      <input type="date" id="date" name="date" required />
+
+      <label for="content">本文：</label>
+      <textarea id="content" name="content" rows="6" required></textarea>
+
+      <label for="media">写真・動画：</label>
+      <input type="file" id="media" name="media" accept="image/*,video/*" />
+
+      <button type="submit">投稿する</button>
+    </form>
+
+    <p class="note">※このフォームはデモです。投稿は手動で反映されます。</p>
+  </div>
+
+  <script>
+    document.getElementById('blogForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const title = document.getElementById('title').value;
+      const date = document.getElementById('date').value;
+      const content = document.getElementById('content').value;
+      const file = document.getElementById('media').files[0];
+
+      let fileName = file ? file.name : '（メディアなし）';
+
+      alert(
+        `以下の内容で投稿されました（仮）：\n\n` +
+        `タイトル：${title}\n` +
+        `日付：${date}\n` +
+        `本文：${content}\n` +
+        `メディア：${fileName}\n\n` +
+        `※実際の反映は手動で blogs.json に追加してください。`
+      );
+
+      document.getElementById('blogForm').reset();
+    });
+  </script>
+</body>
+</html>
