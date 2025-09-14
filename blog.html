@@ -27,44 +27,51 @@
   </div>
 
   <script>
-    fetch('https://script.google.com/macros/s/AKfycbzSZms_OwDf6-f8jAxcnUVSuExWB0O-uAE7slIKbMm4OojcQSvSL6NARqyGEW0uJVFl/exec')
-      .then(res => res.json())
-      .then(blogs => {
-        const container = document.getElementById('blogContent');
-        blogs.reverse().forEach(blog => {
-          const article = document.createElement('article');
-          article.className = 'blog-entry';
+  fetch('https://script.google.com/macros/s/AKfycbzSZms_OwDf6-f8jAxcnUVSuExWB0O-uAE7slIKbMm4OojcQSvSL6NARqyGEW0uJVFl/exec')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTPエラー: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(blogs => {
+      const container = document.getElementById('blogContent');
+      container.innerHTML = ''; // 初期化
 
-          const date = new Date(blog['日付']).toLocaleDateString('ja-JP', {
-            year: 'numeric', month: 'long', day: 'numeric'
-          });
+      blogs.reverse().forEach(blog => {
+        const article = document.createElement('article');
+        article.className = 'blog-entry';
 
-          let mediaHTML = '';
-          const mediaUrl = blog['メディアurl'];
-          if (mediaUrl) {
-            if (mediaUrl.endsWith('.mp4')) {
-              mediaHTML = `<video controls><source src="${mediaUrl}" type="video/mp4"></video>`;
-            } else if (mediaUrl.includes('id=')) {
-              const driveId = mediaUrl.split('id=')[1];
-              mediaHTML = `<img src="https://drive.google.com/uc?export=view&id=${driveId}" alt="投稿メディア">`;
-            } else {
-              mediaHTML = `<img src="${mediaUrl}" alt="投稿メディア">`; // fallback
-            }
-          }
-
-          article.innerHTML = `
-            <p class="post-date">${date}</p>
-            <h3>${blog['タイトル']}</h3>
-            <blockquote>${blog['本文']}</blockquote>
-            ${mediaHTML}
-          `;
-          container.appendChild(article);
+        const date = new Date(blog['日付']).toLocaleDateString('ja-JP', {
+          year: 'numeric', month: 'long', day: 'numeric'
         });
-      })
-      .catch(error => {
-        console.error('データの取得に失敗しました:', error);
-        document.getElementById('blogContent').innerHTML = '<p>投稿の読み込みに失敗しました。</p>';
+
+        let mediaHTML = '';
+        const mediaUrl = blog['メディアurl'];
+        if (mediaUrl) {
+          if (mediaUrl.endsWith('.mp4')) {
+            mediaHTML = `<video controls><source src="${mediaUrl}" type="video/mp4"></video>`;
+          } else if (mediaUrl.includes('id=')) {
+            const driveId = mediaUrl.split('id=')[1];
+            mediaHTML = `<img src="https://drive.google.com/uc?export=view&id=${driveId}" alt="投稿メディア">`;
+          } else {
+            mediaHTML = `<img src="${mediaUrl}" alt="投稿メディア">`;
+          }
+        }
+
+        article.innerHTML = `
+          <p class="post-date">${date}</p>
+          <h3>${blog['タイトル']}</h3>
+          <blockquote>${blog['本文']}</blockquote>
+          ${mediaHTML}
+        `;
+        container.appendChild(article);
       });
-  </script>
+    })
+    .catch(error => {
+      console.error('データの取得に失敗しました:', error);
+      document.getElementById('blogContent').innerHTML = '<p>投稿の読み込みに失敗しました。</p>';
+    });
+</script>
 </body>
 </html>
